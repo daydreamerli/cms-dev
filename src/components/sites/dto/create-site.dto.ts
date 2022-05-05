@@ -35,19 +35,4 @@ export class CreateSiteDto {
   @IsNumber()
   @IsOptional()
   readonly weekendMax: number;
-
-  @ApiProperty()
-  @IsString()
-  @IsOptional()
-  readonly image: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsOptional()
-  readonly latitude: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsOptional()
-  readonly longitude: string;
 }
