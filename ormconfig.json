@@ -1,0 +1,13 @@
+{   "name":"development",
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "username": "root",
+    "password": "nestjs2021",
+    "database": "cms-pbr",
+    "entities": ["dist/**/*.entity{.ts,.js}"],
+    "synchronize": true,
+    "cache": false,
+    "logging": ["error"],
+    "logger": "file"
+}
