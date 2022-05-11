@@ -49,7 +49,7 @@ export class OrdersService {
     return await this.orderRepository.findOne(id);
   }
 
-  public async findByTime(rego: string) {
+  public async findActive(rego: string) {
     const timeNow = new Date();
     const today = timeNow.toDateString();
     console.log(today);
@@ -75,6 +75,28 @@ export class OrdersService {
       return existingOrder[existingOrder.length - 1];
     }
     return new HttpException('No order found', HttpStatus.NOT_FOUND);
+  }
+
+  public async findSiteActive(siteId: number) {
+    const timeNow = new Date();
+    const today = timeNow.toDateString();
+    console.log(today);
+    const existingOrder = await this.orderRepository
+      .createQueryBuilder('order')
+      .where(`order.siteId = :siteId`, { siteId: siteId })
+      .getMany();
+    if (existingOrder.length === 0) {
+      return new HttpException('No order found', HttpStatus.NOT_FOUND);
+    }
+    const activeSiteOrder: Order[] = [];
+    existingOrder.forEach((order) => {
+      const orderDate = order.createTime.toDateString();
+      const orderValidateTime = order.validateTime.toISOString();
+      if (orderDate === today && orderValidateTime >= timeNow.toISOString()) {
+        activeSiteOrder.push(order);
+      }
+      return activeSiteOrder;
+    });
   }
 
   public async findByRego(rego: string) {

@@ -1,4 +1,4 @@
-{   "name":"development",
+{   "name":"default",
     "type": "mysql",
     "host": "localhost",
     "port": 3306,
@@ -7,7 +7,7 @@
     "database": "cms-pbr",
     "entities": ["dist/**/*.entity{.ts,.js}"],
     "synchronize": true,
-    "cache": false,
+    "cache": true,
     "logging": ["error"],
     "logger": "file"
 }

@@ -1,17 +1,17 @@
-import { IsNumber, IsDateString, IsOptional } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateHolidayRateDto {
   @IsNumber()
   readonly siteId: number;
+
+  @IsString()
+  readonly rateName: string;
 
   @IsNumber()
   readonly hourlyRate: number;
 
   @IsNumber()
   readonly dailyMax: number;
-
-  @IsDateString()
-  readonly startAt: Date;
 
   @IsNumber()
   @IsOptional()

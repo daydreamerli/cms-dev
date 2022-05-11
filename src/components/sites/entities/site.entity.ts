@@ -15,7 +15,7 @@ export class Site {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   siteName: string;
 
   @Column()
@@ -24,6 +24,9 @@ export class Site {
   @ManyToOne(() => Owner, (owner) => owner.sites)
   @JoinColumn({ name: 'ownerId' })
   owner: Owner;
+
+  @Column()
+  ownerId: number;
 
   @Column()
   spotsNum: number;
@@ -44,9 +47,7 @@ export class Site {
   @JoinColumn()
   offers: Offer[];
 
-  @OneToMany(() => HolidayRate, (holidayRate) => holidayRate.site, {
-    cascade: true,
-  })
+  @OneToMany(() => HolidayRate, (holidayRate) => holidayRate.site)
   @JoinColumn()
   holidayRates: HolidayRate[];
 

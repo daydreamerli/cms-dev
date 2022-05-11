@@ -19,6 +19,9 @@ export class Holiday {
   @JoinColumn({ name: 'holidayRateId' })
   holidayRate: HolidayRate;
 
+  @Column()
+  holidayRateId: number;
+
   @Column({ type: 'date' })
   startAt: Date;
 

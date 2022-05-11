@@ -42,6 +42,12 @@ export class OrdersController {
     return this.ordersService.findSiteOrders(+siteId);
   }
 
+  @Get('site/:siteId/active')
+  @ApiBearerAuth()
+  findSiteActiveOrders(@Param('siteId') siteId: string) {
+    return this.ordersService.findSiteActive(+siteId);
+  }
+
   @Post('new-order')
   create(@Body() createOrderDto: CreateOrderDto) {
     console.log(createOrderDto);
@@ -62,7 +68,7 @@ export class OrdersController {
   @Get('rego/:rego')
   @ApiBearerAuth()
   validateByRego(@Param('rego') rego: string) {
-    return this.ordersService.findByTime(rego);
+    return this.ordersService.findActive(rego);
   }
 
   @Get()

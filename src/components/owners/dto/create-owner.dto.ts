@@ -13,5 +13,4 @@ export class CreateOwnerDto {
 
   @IsString()
   readonly contactNum: string;
-
 }

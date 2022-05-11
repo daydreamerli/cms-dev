@@ -17,7 +17,13 @@ export class Offer {
   site: Site;
 
   @Column()
+  siteId: number;
+
+  @Column()
   offerName: string;
+
+  @Column()
+  sequences: number; // Sequences of the offer
 
   @Column()
   charge: number;
@@ -32,5 +38,5 @@ export class Offer {
   endAt: Date;
 
   @Column({ default: false })
-  active: boolean;
+  active: boolean; // Whether the offer is active or not for the site at the time period
 }

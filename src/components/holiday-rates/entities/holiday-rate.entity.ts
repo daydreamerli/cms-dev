@@ -22,6 +22,9 @@ export class HolidayRate {
   @JoinColumn()
   holidays: Holiday[];
 
+  @Column()
+  rateName: string;
+
   @Column({ nullable: true })
   hourlyRate: number;
 

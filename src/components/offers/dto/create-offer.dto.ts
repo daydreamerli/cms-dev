@@ -12,11 +12,15 @@ export class CreateOfferDto {
 
   @ApiProperty()
   @IsNumber()
+  readonly sequences: number;
+
+  @ApiProperty()
+  @IsNumber()
   readonly charge: number;
 
   @ApiProperty()
   @IsNumber()
-  readonly validateTime: number;
+  readonly validateHours: number;
 
   @ApiProperty()
   @IsDateString()
@@ -26,3 +30,4 @@ export class CreateOfferDto {
   @IsDateString()
   readonly endAt: Date;
 }
+

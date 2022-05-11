@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { getConnection, Repository } from 'typeorm';
 import { CreateSiteDto } from './dto/create-site.dto';
 import { UpdateSiteDto } from './dto/update-site.dto';
 import { Site } from './entities/site.entity';
@@ -13,15 +13,31 @@ export class SitesService {
   ) {}
 
   public async create(createSiteDto: CreateSiteDto): Promise<Partial<Site>> {
+    const ownerId = createSiteDto.ownerId;
     console.log('Get New Site Data', createSiteDto);
-    const existingSite = this.siteRepo.findOne({
+    const existingSite = await this.siteRepo.findOne({
       where: { siteName: createSiteDto.siteName },
     });
     if (existingSite) {
-      return existingSite;
+      return {
+        id: existingSite.id,
+        siteName: existingSite.siteName,
+        address: existingSite.address,
+        spotsNum: existingSite.spotsNum,
+        baseTime: existingSite.baseTime,
+        casualRate: existingSite.casualRate,
+        dailyMax: existingSite.dailyMax,
+        weekendMax: existingSite.weekendMax,
+      };
     }
+    // to-do add relationship builder to add owner to site
     const newSite = this.siteRepo.create(createSiteDto);
     await this.siteRepo.save(newSite);
+    await getConnection()
+      .createQueryBuilder()
+      .relation(Site, 'owner')
+      .of(newSite)
+      .set(ownerId);
     return {
       id: newSite.id,
       siteName: newSite.siteName,
@@ -34,8 +50,8 @@ export class SitesService {
     };
   }
 
-  findAll() {
-    return `This action returns all sites`;
+  public async findAll() {
+    return await this.siteRepo.find({});
   }
 
   findOne(id: number) {

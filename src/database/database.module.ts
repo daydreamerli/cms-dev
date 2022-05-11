@@ -11,8 +11,8 @@ import { Connection, getConnectionOptions } from 'typeorm';
       useFactory: async () =>
         Object.assign(
           await getConnectionOptions(
-            process.env.NODE_ENV === 'production' ? 'development' : 'development'
-          )
+            process.env.NODE_ENV === 'production' ? 'prod' : 'default',
+          ),
         ),
     }),
   ],

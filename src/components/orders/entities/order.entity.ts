@@ -19,6 +19,9 @@ export class Order {
   site: Site;
 
   @Column()
+  siteId: number;
+
+  @Column()
   rego: string;
 
   @Column()
