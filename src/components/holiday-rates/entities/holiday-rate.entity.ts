@@ -34,6 +34,9 @@ export class HolidayRate {
   @Column({ nullable: true })
   specialRate: number;
 
+  @Column({ nullable: true })
+  specialHours: number;
+
   @Column({ default: false })
-  status: boolean;
+  status: boolean; // identify if special rate is active or not
 }

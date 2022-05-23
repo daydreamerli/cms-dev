@@ -13,7 +13,9 @@ export class OwnersService {
   ) {}
 
   public async create(createOwnerDto: CreateOwnerDto) {
-    const existingOwner = await this.ownerRepo.findOne({ where: { email: createOwnerDto.email } });
+    const existingOwner = await this.ownerRepo.findOne({
+      where: { email: createOwnerDto.email },
+    });
     if (existingOwner) {
       return existingOwner;
     }

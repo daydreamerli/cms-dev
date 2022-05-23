@@ -1,7 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { HolidaysService } from './holidays.service';
 import { CreateHolidayDto } from './dto/create-holiday.dto';
 import { UpdateHolidayDto } from './dto/update-holiday.dto';
+import { query } from 'express';
 
 @Controller('holidays')
 export class HolidaysController {
@@ -17,9 +27,19 @@ export class HolidaysController {
     return this.holidaysService.findAll();
   }
 
+  @Get(':siteId/today')
+  isTodayHoliday(@Param('siteId') siteId: number) {
+    return this.holidaysService.isTodayHoliday(siteId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.holidaysService.findOne(+id);
+  }
+
+  @Get('rate/:id')
+  findRateHolidays(@Param('id') id: string) {
+    return this.holidaysService.findRateHolidays(+id);
   }
 
   @Patch(':id')

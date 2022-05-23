@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getConnection, Repository } from 'typeorm';
+import { createQueryBuilder, getConnection, Repository } from 'typeorm';
 import { CreateHolidayRateDto } from './dto/create-holiday-rate.dto';
 import { UpdateHolidayRateDto } from './dto/update-holiday-rate.dto';
 import { HolidayRate } from './entities/holiday-rate.entity';
@@ -9,14 +9,18 @@ import { HolidayRate } from './entities/holiday-rate.entity';
 export class HolidayRatesService {
   constructor(
     @InjectRepository(HolidayRate)
-    private readonly holidayRateRepo: Repository<HolidayRate>,
+    private readonly holidayRateRepo: Repository<HolidayRate>
   ) {}
 
   public async create(createHolidayRateDto: CreateHolidayRateDto) {
     const siteId = createHolidayRateDto.siteId;
-    const existingHolidayRate = this.holidayRateRepo.findOne({
-      where: { rateName: createHolidayRateDto.rateName },
-    });
+    const existingHolidayRate = await this.holidayRateRepo
+      .createQueryBuilder('holidayRate')
+      .where('rateName = :rateName', {
+        rateName: createHolidayRateDto.rateName,
+      })
+      .andWhere('siteId = :siteId', { siteId })
+      .getOne();
     if (existingHolidayRate) {
       return existingHolidayRate;
     }
@@ -32,16 +36,30 @@ export class HolidayRatesService {
     return newHolidayRate;
   }
 
-  public async findOne(id: number) {
-    return await this.holidayRateRepo.findOne(id);
+  public async findSiteHRates(siteId: number) {
+    const siteHolidayRates = await this.holidayRateRepo
+      .createQueryBuilder()
+      .where('siteId = :siteId', { siteId })
+      .getMany();
+    console.log(siteHolidayRates);
+    return siteHolidayRates;
   }
 
-  findAllHolidayRatesBySiteId(siteId: number) {
-    return this.holidayRateRepo.find({ where: { siteId } });
+  findHolidayRate(holidayId: number) {
+    const holidayRate = getConnection()
+      .createQueryBuilder()
+      .relation(HolidayRate, 'holiday')
+      .of(holidayId)
+      .loadOne();
+    return holidayRate;
   }
 
   public async findAll() {
     return await this.holidayRateRepo.find();
+  }
+
+  public async findOne(id: number) {
+    return await this.holidayRateRepo.findOne(id);
   }
 
   update(id: number, updateHolidayRateDto: UpdateHolidayRateDto) {

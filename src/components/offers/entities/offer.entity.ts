@@ -17,9 +17,6 @@ export class Offer {
   site: Site;
 
   @Column()
-  siteId: number;
-
-  @Column()
   offerName: string;
 
   @Column()

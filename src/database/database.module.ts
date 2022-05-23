@@ -8,12 +8,7 @@ import { Connection, getConnectionOptions } from 'typeorm';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async () =>
-        Object.assign(
-          await getConnectionOptions(
-            process.env.NODE_ENV === 'production' ? 'prod' : 'default',
-          ),
-        ),
+      useFactory: async () => Object.assign(await getConnectionOptions()),
     }),
   ],
   exports: [TypeOrmModule],

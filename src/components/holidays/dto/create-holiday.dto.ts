@@ -7,6 +7,9 @@ export class CreateHolidayDto {
   @IsNumber()
   readonly holidayRateId: number;
 
+  @IsNumber()
+  readonly siteId: number;
+
   @IsDateString()
   readonly startAt: Date;
 

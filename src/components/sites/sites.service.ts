@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { getConnection, Repository } from 'typeorm';
@@ -54,8 +55,26 @@ export class SitesService {
     return await this.siteRepo.find({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} site`;
+  public async findOne(id: number) {
+    return await this.siteRepo.findOne(id);
+  }
+
+  public async findSiteHRates(siteId: number) {
+    const siteHolidayRates = await this.siteRepo
+      .createQueryBuilder('site')
+      .leftJoinAndSelect('site.holidayRates', 'holidayRates')
+      .where('site.id = :siteId', { siteId })
+      .getMany();
+    return siteHolidayRates;
+  }
+
+  public async findSiteHolidays(siteId: number) {
+    const siteHolidays = await this.siteRepo
+      .createQueryBuilder('site')
+      .leftJoinAndSelect('site.holidays', 'holidays')
+      .where('site.id = :siteId', { siteId })
+      .getMany();
+    return siteHolidays;
   }
 
   update(id: number, updateSiteDto: UpdateSiteDto) {

@@ -36,13 +36,13 @@ export class OrdersController {
     return this.ordersService.findUnPaid();
   }
 
-  @Get('site/:siteId')
+  @Get('site')
   @ApiBearerAuth()
-  findSiteOrders(@Param('siteId') siteId: string) {
-    return this.ordersService.findSiteOrders(+siteId);
+  findSiteOrders(@Query('siteId') siteId: number) {
+    return this.ordersService.findSiteOrders(siteId);
   }
 
-  @Get('site/:siteId/active')
+  @Get(':siteId/active')
   @ApiBearerAuth()
   findSiteActiveOrders(@Param('siteId') siteId: string) {
     return this.ordersService.findSiteActive(+siteId);
@@ -65,14 +65,19 @@ export class OrdersController {
     return this.ordersService.updatePaymentStatus(+id);
   }
 
-  @Get('rego/:rego')
+  @Get(':siteId/:rego')
   @ApiBearerAuth()
-  validateByRego(@Param('rego') rego: string) {
-    return this.ordersService.findActive(rego);
+  validateByRego(@Param('rego') rego: string, @Param('siteId') siteId: number) {
+    console.log('rego api got: ', rego);
+    return this.ordersService.findActive(rego, siteId);
   }
 
-  @Get()
-  findByRego(@Query('rego') rego: string) {
+  @Get('rego/:rego')
+  @ApiBearerAuth()
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @RolesAllowed(Role.ADMIN, Role.MANAGER)
+  findOrdersByRego(@Param('rego') rego: string) {
+    console.log(rego);
     return this.ordersService.findByRego(rego);
   }
 

@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { HolidayRatesService } from './holiday-rates.service';
 import { CreateHolidayRateDto } from './dto/create-holiday-rate.dto';
 import { UpdateHolidayRateDto } from './dto/update-holiday-rate.dto';
@@ -22,8 +31,21 @@ export class HolidayRatesController {
     return this.holidayRatesService.findOne(+id);
   }
 
+  // @Get('holiday:id')
+  //  findHolidaysRate(@Query('id') id: string) {
+  //   return this.holidayRatesService.findHolidayRate(+id);
+  // }
+
+  @Get('site/:id')
+  findSiteHRate(@Param('id') id: string) {
+    return this.holidayRatesService.findSiteHRates(+id);
+  }
+
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateHolidayRateDto: UpdateHolidayRateDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateHolidayRateDto: UpdateHolidayRateDto,
+  ) {
     return this.holidayRatesService.update(+id, updateHolidayRateDto);
   }
 

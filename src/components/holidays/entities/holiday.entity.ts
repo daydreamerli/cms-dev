@@ -1,4 +1,5 @@
 import { HolidayRate } from 'src/components/holiday-rates/entities/holiday-rate.entity';
+import { Site } from 'src/components/sites/entities/site.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -19,8 +20,9 @@ export class Holiday {
   @JoinColumn({ name: 'holidayRateId' })
   holidayRate: HolidayRate;
 
-  @Column()
-  holidayRateId: number;
+  @ManyToOne(() => Site, (site) => site.holidays)
+  @JoinColumn({ name: 'siteId' })
+  site: Site;
 
   @Column({ type: 'date' })
   startAt: Date;

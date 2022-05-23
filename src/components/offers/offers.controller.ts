@@ -26,8 +26,8 @@ export class OffersController {
     return this.offersService.findAll();
   }
 
-  @Get('')
-  findSiteOffers(@Query('siteId') siteId: number) {
+  @Get('site/:siteId')
+  findSiteOffers(@Param('siteId') siteId: number) {
     return this.offersService.getSiteOffers(siteId);
   }
 

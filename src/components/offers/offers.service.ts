@@ -14,9 +14,12 @@ export class OffersService {
 
   public async create(createOfferDto: CreateOfferDto) {
     const siteId = createOfferDto.siteId;
-    const existingOffer = await this.offerRepo.findOne({
-      where: { offerName: createOfferDto.offerName },
-    });
+    const offerName = createOfferDto.offerName;
+    const existingOffer = await this.offerRepo
+      .createQueryBuilder('offer')
+      .where('offerName = :offerName', { offerName })
+      .andWhere('siteId = :siteId', { siteId })
+      .getOne();
     if (existingOffer) {
       return existingOffer;
     }
@@ -31,26 +34,40 @@ export class OffersService {
     return newOffer;
   }
 
-  public async getSiteOffers(siteId: number) {
-    return await this.offerRepo.find({
-      where: { siteId },
-    });
+  public async getSiteOffers(siteId: number): Promise<Offer[]> {
+    const siteOffers = await this.offerRepo
+      .createQueryBuilder('offer')
+      .where('siteId = :siteId', { siteId })
+      .getMany();
+    // if (siteOffers.length === 0) {
+    //   throw new HttpException(
+    //     'No offers found for this site',
+    //     HttpStatus.NOT_FOUND,
+    //   );
+    // }
+    return siteOffers;
   }
 
   public async getCurrentOffer(siteId: number) {
+    // to-do need add weekday or weekend check
     const now = new Date();
     const timeNow = new Date(now).toLocaleTimeString();
     console.log(timeNow);
-    console.log(typeof timeNow);
-    const siteOffers = await this.getSiteOffers(siteId);
+    const siteOffers = await this.offerRepo
+      .createQueryBuilder('offer')
+      .where('siteId = :siteId', { siteId })
+      .getMany();
+    console.log(siteOffers);
     if (siteOffers.length === 0) {
-      return new HttpException('No order found', HttpStatus.NOT_FOUND);
+      return new HttpException(
+        'No Offer found for this Site',
+        HttpStatus.NOT_FOUND,
+      );
     }
     console.log(siteOffers);
     const currentOffer = siteOffers.find((offer) => {
       const offerStartDate = offer.startAt as unknown as string;
       console.log(offerStartDate);
-      console.log(typeof offerStartDate);
       const offerEndDate = offer.endAt as unknown as string;
       console.log(offerEndDate);
       if (offerStartDate <= timeNow && offerEndDate >= timeNow) {
@@ -58,7 +75,7 @@ export class OffersService {
       }
     });
     if (!currentOffer) {
-      return new HttpException('No order found', HttpStatus.NOT_FOUND);
+      return new HttpException('No Offer ATM', HttpStatus.NOT_FOUND);
     }
     return currentOffer;
   }

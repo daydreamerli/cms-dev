@@ -1,4 +1,5 @@
 import { HolidayRate } from 'src/components/holiday-rates/entities/holiday-rate.entity';
+import { Holiday } from 'src/components/holidays/entities/holiday.entity';
 import { Offer } from 'src/components/offers/entities/offer.entity';
 import { Owner } from 'src/components/owners/entities/owner.entity';
 import {
@@ -26,9 +27,6 @@ export class Site {
   owner: Owner;
 
   @Column()
-  ownerId: number;
-
-  @Column()
   spotsNum: number;
 
   @Column()
@@ -50,6 +48,10 @@ export class Site {
   @OneToMany(() => HolidayRate, (holidayRate) => holidayRate.site)
   @JoinColumn()
   holidayRates: HolidayRate[];
+
+  @OneToMany(() => Holiday, (holiday) => holiday.site)
+  @JoinColumn()
+  holidays: Holiday[];
 
   @Column({ nullable: true })
   image: string;
